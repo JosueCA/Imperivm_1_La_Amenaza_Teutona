@@ -148,11 +148,11 @@ while (set.player == AIPlayer) {
     if (!brk.IsValid) nCount = 0;
     if (nCount > 0) cmd = UTrainCmd(EnvReadInt(set, "nBuildType"), set.IsRomeStronghold);
 
-    // Simplified: removed FreezeArmyBuild check, only check if can afford
+    // Check FreezeArmyBuild to allow saving gold for research
     if (nCount > 0) if (!bAssUnderFire)
       if (!set.CanAfford(cmd, nCount)) { nCount = 0; EnvWriteInt(set, "nBuildCount", -1); }
-      // else if (nFreezeArmyBuild != 0)
-      //   nCount = 0;
+      else if (nFreezeArmyBuild != 0)
+        nCount = 0;
 
     if (nCount > 0) {
       int   gold, food;
@@ -196,25 +196,32 @@ while (set.player == AIPlayer) {
 	if (train > 0) if (!bAssUnderFire) if (MilUnits(AIPlayer) >= train)
 		set.AIRun("ESH_ResearchTraining.vs");
 
-	if (!bNeedTraining) // Don't spend money on anything useless if we need training
+	// arena units and tavern research - always run regardless of training mode
+	i = AIVar(AIPlayer, AIV_ArenaHire);
+	if (i > 0) if (!bAssUnderFire) if (bArenaRush || MilUnits(AIPlayer) >= i)
+		set.AIRun("ESH_ArenaUnits.vs");
+
+	// tavern research (gaul and roman)
+	i = AIVar(AIPlayer, AIV_Training_Tavern);
+	if (i > 0) if (MilUnits(AIPlayer) >= i) {
+		if (set.IsGaulStronghold) {
+			set.AIRun("ESH_GTavern.vs");
+		} else if (set.IsRomeStronghold) {
+			set.AIRun("ESH_RTavern.vs");
+		}
+	}
+
+	if (!bNeedTraining) // Don't spend money on druids if we need training
 		{
 		// druids
-			i = AIVar(AIPlayer, AIV_CombatMagic);
-			if (i > 0) if (!bAssUnderFire) if (!bRush)
-				set.AIRun("ESH_CombatMagic.vs");
-
 			i = AIVar(AIPlayer, AIV_Druids);
 			if (i > 0) if (bMilUnits) if (!bAssUnderFire) if (!bRush) if (MilUnits(AIPlayer) >= 20)
 				set.AIRun("ESH_Druids.vs");
 
-		// arena units
-			i = AIVar(AIPlayer, AIV_ArenaHire);
-			if (i > 0) if (!bAssUnderFire) if (bArenaRush || MilUnits(AIPlayer) >= i)
-				set.AIRun("ESH_ArenaUnits.vs");
-
-		// gaul tavern rush
-			if (bGTRush || set.gold>=AIVar(AIPlayer, AIV_ExcessGold))
-				set.AIRun("ESH_GTRush.vs");
+		// combat magic (lowest priority)
+			i = AIVar(AIPlayer, AIV_CombatMagic);
+			if (i > 0) if (!bAssUnderFire) if (!bRush) if (MilUnits(AIPlayer) >= AIVar(AIPlayer, AIV_Training_CombatMagic))
+				set.AIRun("ESH_CombatMagic.vs");
 		}
 	else
 		{

@@ -86,7 +86,7 @@ for (i = 1; i < NumSquads(AIPlayer); i += 1) [
 			}
 
   // use ruins
-	if (rand(5)==3) if (AIVar(AIPlayer, AIV_UseRuins) != 0) if (sq.InHolder) if (sq.Leader.AsHero) if (sq.GAIKAIn.settlement.IsStronghold)
+	if (rand(3)==3) if (AIVar(AIPlayer, AIV_UseRuins) != 0) if (sq.InHolder) if (sq.Leader.AsHero) if (sq.GAIKAIn.settlement.IsStronghold)
 		{
 			Obj ruins;
 			if (sq.State == SS_Ruins)

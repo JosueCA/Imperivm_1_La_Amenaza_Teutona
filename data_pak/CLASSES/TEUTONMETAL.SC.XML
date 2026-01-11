@@ -1,6 +1,6 @@
 <class id="TeutonMetal" cpp_class="CVXUnit" parent="Horse" entity="assets/entities/Units/TeutonMetal/TeutonMetal.ent.xml">
 
-  <properties minattack="12" maxattack="22" defense_slash="10" defense_pierce="10"/>
+  <properties minattack="12" maxattack="22" defense_slash="0" defense_pierce="0"/>
   <properties maxhealth="250"/>
   <properties display_name="Teuton Raider" display_name_plural="Teuton Riders"/>
   <properties help="contents/units/TRider"/>

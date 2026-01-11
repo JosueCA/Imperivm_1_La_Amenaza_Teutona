@@ -1,5 +1,5 @@
 <class id="RScout" altid="RHorseman" cpp_class="CVXUnit" parent="Horse" entity="assets/entities/Units/RHorseman/RHorseman.ent.xml">
-  <properties maxhealth="480"/>
+  <properties maxhealth="400"/>
   <properties minattack="16" maxattack="24" defense_slash="4" defense_pierce="0"/>
   <properties speed="140"/>
   <properties speciality="charge"/>

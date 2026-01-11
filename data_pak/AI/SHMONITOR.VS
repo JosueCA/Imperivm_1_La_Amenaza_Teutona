@@ -120,7 +120,7 @@ while( true )
 					if (qStrongholds.count > 0) {
 						s = qStrongholds.GetObjList()[0].AsBuilding().settlement;
 						if (s.IsValid) {
-							if (s.gold < 2000) {
+							if (s.gold < 4000) {
 								bNeedGold = true;
 							}
 						}

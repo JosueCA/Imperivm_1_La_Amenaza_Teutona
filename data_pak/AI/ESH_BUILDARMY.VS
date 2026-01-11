@@ -84,16 +84,18 @@ if (EnvReadInt(set, "TechSeq" + AIPlayer + "_Initted") == 0) {
   }
 */
   // decide min and quick gaul tweak
-  if (bRome) min = 1;
-  else {
-    min = 2;
-    if (AIVar(AIPlayer, AIV_CounterUnits) == 0)
-      if (rand(10) != 0) { // make spearmen first, to handle the damn hastati :)
-        EnvWriteInt(set, "TechSeq" + AIPlayer + "_" + 2, 3);
-        EnvWriteInt(set, "TechSeq" + AIPlayer + "_" + 3, 2);
-        min = 3;
-      }
-  }
+//  if (bRome) min = 1;
+//  else {
+//    min = 2;
+//    if (AIVar(AIPlayer, AIV_CounterUnits) == 0)
+//      if (rand(10) != 0) { // make spearmen first, to handle the damn hastati :)
+//        EnvWriteInt(set, "TechSeq" + AIPlayer + "_" + 2, 3);
+//        EnvWriteInt(set, "TechSeq" + AIPlayer + "_" + 3, 2);
+//        min = 3;
+//      }
+//  }
+  min = 1;
+
   // scramble
   for (i = rand(10); i > 0 ; i -= 1) {
     str sa, sb;
@@ -201,7 +203,7 @@ nType = -2;
 if (nLastResearched == 0) if (AIVar(AIPlayer, AIV_CounterUnits) != 0) {
   int i, dummy;
   // Base weights favor advanced units (types 1-5) over basic (type 0)
-  int w0 = 0, w1 = 200, w2 = 300, w3 = 300, w4 = 300, w5 = 600, total;
+  int w0 = 0, w1 = 200, w2 = 500, w3 = 500, w4 = 500, w5 = 1000, total;
   int ec, eg, og;
 
   if (IsResearched(set, UTech(5, bRome))) // more boost for heavy units when researched
@@ -209,7 +211,7 @@ if (nLastResearched == 0) if (AIVar(AIPlayer, AIV_CounterUnits) != 0) {
 
   // RHastatus counters
   ec = EnemyCount(AIPlayer, UType(0, true));
-  if (ec >= 8) if (GetCmdCost(UTrainCmd(0, true), eg, dummy)) {
+  if (ec >= 5) if (GetCmdCost(UTrainCmd(0, true), eg, dummy)) {
     eg = eg * ec;
     if (bRome) {
       // RSpearman
@@ -238,7 +240,7 @@ if (nLastResearched == 0) if (AIVar(AIPlayer, AIV_CounterUnits) != 0) {
 
   // RGladiator counters
   ec = EnemyCount(AIPlayer, UType(2, true));
-  if (ec >= 5) if (GetCmdCost(UTrainCmd(2, true), eg, dummy)) {
+  if (ec >= 3) if (GetCmdCost(UTrainCmd(2, true), eg, dummy)) {
     eg = eg * ec;
     if (bRome) {
       // RHorseman
@@ -267,7 +269,7 @@ if (nLastResearched == 0) if (AIVar(AIPlayer, AIV_CounterUnits) != 0) {
 
   // RSpearman counters
   ec = EnemyCount(AIPlayer, UType(3, true));
-  if (ec >= 5) if (GetCmdCost(UTrainCmd(3, true), eg, dummy)) {
+  if (ec >= 3) if (GetCmdCost(UTrainCmd(3, true), eg, dummy)) {
     eg = eg * ec;
     if (bRome) {
       // RGladiator
@@ -296,7 +298,7 @@ if (nLastResearched == 0) if (AIVar(AIPlayer, AIV_CounterUnits) != 0) {
 
   // RScout counters
   ec = EnemyCount(AIPlayer, UType(4, true));
-  if (ec >= 5) if (GetCmdCost(UTrainCmd(4, true), eg, dummy)) {
+  if (ec >= 3) if (GetCmdCost(UTrainCmd(4, true), eg, dummy)) {
     eg = eg * ec;
     if (bRome) {
       // RSpearman (Princeps) - effective vs cavalry
@@ -330,7 +332,7 @@ if (nLastResearched == 0) if (AIVar(AIPlayer, AIV_CounterUnits) != 0) {
 
   // RPraetorian counters
   ec = EnemyCount(AIPlayer, UType(5, true));
-  if (ec >= 5) if (GetCmdCost(UTrainCmd(5, true), eg, dummy)) {
+  if (ec >= 3) if (GetCmdCost(UTrainCmd(5, true), eg, dummy)) {
     eg = eg * ec;
     if (bRome) {
       // RArcher
@@ -388,13 +390,18 @@ if (nLastResearched == 0) if (AIVar(AIPlayer, AIV_CounterUnits) != 0) {
 
   // GSwordsman counters
   ec = EnemyCount(AIPlayer, UType(0, false));
-  if (ec >= 8) if (GetCmdCost(UTrainCmd(0, true), eg, dummy)) {
+  if (ec >= 5) if (GetCmdCost(UTrainCmd(0, true), eg, dummy)) {
     eg = eg * ec;
     if (bRome) {
       // RGladiator
       if (GetCmdCost(UTrainCmd(2, bRome), og, dummy)) {
         og = og * Count(AIPlayer, UType(2, bRome));
         if (og < eg) w2 += (eg - og);
+      }
+      // RSpearman (Princeps)
+      if (GetCmdCost(UTrainCmd(3, bRome), og, dummy)) {
+        og = og * Count(AIPlayer, UType(3, bRome));
+        if (og < eg) w3 += (eg - og);
       }
       // RHorseman
       if (GetCmdCost(UTrainCmd(4, bRome), og, dummy)) {
@@ -417,13 +424,13 @@ if (nLastResearched == 0) if (AIVar(AIPlayer, AIV_CounterUnits) != 0) {
 
   // GArcher counters
   ec = EnemyCount(AIPlayer, UType(1, false));
-  if (ec >= 8) if (GetCmdCost(UTrainCmd(1, true), eg, dummy)) {
+  if (ec >= 5) if (GetCmdCost(UTrainCmd(1, true), eg, dummy)) {
     eg = eg * ec;
     if (bRome) {
-      // RGladiator
-      if (GetCmdCost(UTrainCmd(2, bRome), og, dummy)) {
-        og = og * Count(AIPlayer, UType(2, bRome));
-        if (og < eg) w2 += (eg - og);
+      // RSpearman (Princeps)
+      if (GetCmdCost(UTrainCmd(3, bRome), og, dummy)) {
+        og = og * Count(AIPlayer, UType(3, bRome));
+        if (og < eg) w3 += (eg - og);
       }
       // RScout - cavalry vs archers
       if (GetCmdCost(UTrainCmd(4, bRome), og, dummy)) {
@@ -444,9 +451,38 @@ if (nLastResearched == 0) if (AIVar(AIPlayer, AIV_CounterUnits) != 0) {
     }
   }
 
+  // RArcher counters
+  ec = EnemyCount(AIPlayer, UType(1, true));
+  if (ec >= 5) if (GetCmdCost(UTrainCmd(1, true), eg, dummy)) {
+    eg = eg * ec;
+    if (bRome) {
+      // RHorseman - cavalry vs archers
+      if (GetCmdCost(UTrainCmd(4, bRome), og, dummy)) {
+        og = og * Count(AIPlayer, UType(4, bRome));
+        if (og < eg) w4 += (eg - og);
+      }
+      // RSpearman - infantry vs archers
+      if (GetCmdCost(UTrainCmd(3, bRome), og, dummy)) {
+        og = og * Count(AIPlayer, UType(3, bRome));
+        if (og < eg) w3 += (eg - og);
+      }
+    } else {
+      // GHorseman - cavalry vs archers
+      if (GetCmdCost(UTrainCmd(4, bRome), og, dummy)) {
+        og = og * Count(AIPlayer, UType(4, bRome));
+        if (og < eg) w4 += (eg - og);
+      }
+      // GSpearman - infantry vs archers
+      if (GetCmdCost(UTrainCmd(3, bRome), og, dummy)) {
+        og = og * Count(AIPlayer, UType(3, bRome));
+        if (og < eg) w3 += (eg - og);
+      }
+    }
+  }
+
   // GAxeman counters
   ec = EnemyCount(AIPlayer, UType(2, false));
-  if (ec >= 5) if (GetCmdCost(UTrainCmd(2, true), eg, dummy)) {
+  if (ec >= 3) if (GetCmdCost(UTrainCmd(2, true), eg, dummy)) {
     eg = eg * ec;
     if (bRome) {
       // RGladiator
@@ -475,7 +511,7 @@ if (nLastResearched == 0) if (AIVar(AIPlayer, AIV_CounterUnits) != 0) {
 
   // GSpearman counters
   ec = EnemyCount(AIPlayer, UType(3, false));
-  if (ec >= 5) if (GetCmdCost(UTrainCmd(3, true), eg, dummy)) {
+  if (ec >= 3) if (GetCmdCost(UTrainCmd(3, true), eg, dummy)) {
     eg = eg * ec;
     if (bRome) {
       // RGladiator
@@ -504,7 +540,7 @@ if (nLastResearched == 0) if (AIVar(AIPlayer, AIV_CounterUnits) != 0) {
 
   // GHorseman counters
   ec = EnemyCount(AIPlayer, UType(4, false));
-  if (ec >= 5) if (GetCmdCost(UTrainCmd(4, true), eg, dummy)) {
+  if (ec >= 3) if (GetCmdCost(UTrainCmd(4, true), eg, dummy)) {
     eg = eg * ec;
     if (bRome) {
       // RSpearman (Princeps) - effective vs cavalry
@@ -533,7 +569,7 @@ if (nLastResearched == 0) if (AIVar(AIPlayer, AIV_CounterUnits) != 0) {
 
   // GWFighter counters
   ec = EnemyCount(AIPlayer, UType(5, false));
-  if (ec >= 5) if (GetCmdCost(UTrainCmd(5, true), eg, dummy)) {
+  if (ec >= 3) if (GetCmdCost(UTrainCmd(5, true), eg, dummy)) {
     eg = eg * ec;
     if (bRome) {
       // RSpearman (Princeps) - effective vs heavy infantry
@@ -563,7 +599,7 @@ if (nLastResearched == 0) if (AIVar(AIPlayer, AIV_CounterUnits) != 0) {
   // GVikingLord counters
   ec = EnemyCount(AIPlayer, "GVikingLord");
   if (ec >= 1) {
-    eg = 1000 * ec; // hardcoded cost
+    eg = 800 * ec; // hardcoded cost
     if (bRome) {
       // RArcher
       if (GetCmdCost(UTrainCmd(1, bRome), og, dummy)) {
@@ -673,7 +709,7 @@ if (bNeedTraining) {
 }
 
 if (nType < -1) if (nLastResearched == 0) if ((MilUnits(AIPlayer) >= 20) || (nEarlyResearch == 1)) if (bAllowNewResearch)
-if (nLastResearchTime==0 || GetTime()>nLastResearchTime+60000) { // Reduced from 10 to 5 minutes between different unit types
+if (nLastResearchTime==0 || GetTime()>nLastResearchTime+60000) { // Reduced from 10 to 1 minutes between different unit types
   for (nType = 1; nType < 6; nType += 1) {
     int i; 
     if (nType == 1) if (!bRome) continue;
@@ -774,9 +810,7 @@ if (strTech != "") if (!IsResearched(set, strTech))
 
 EnvWriteInt(set, "nBuildType", nType);
 strCmd = UTrainCmd(nType, bRome);
-if (set.CanAfford(strCmd, 10)) nCount = 10;
-else if (set.CanAfford(strCmd, 8)) nCount = 8;
-else if (set.CanAfford(strCmd, 5)) nCount = 5;
+if (set.CanAfford(strCmd, 5)) nCount = 5;
 else if (set.CanAfford(strCmd, 1)) nCount = 1;
 else if (nAssUnderFire <= 0) nCount = 1;
 else {
@@ -794,7 +828,7 @@ else {
   }
   // Fallback to type 0 only if nothing else works
   EnvWriteInt(set, "nBuildType", 0);
-  EnvWriteInt(set, "nBuildCount", 1);
+  EnvWriteInt(set, "nBuildCount", 0); // TEST 0 value
   return;
 }
 

@@ -1,7 +1,7 @@
 <class id="GWFighter" cpp_class="CVXUnit" parent="Melee" entity="assets/entities/units/GWFighter/GWFighter.ent.xml">
 
   <properties maxhealth="360"/>
-  <properties minattack="22" maxattack="32" defense_slash="16" defense_pierce="6"/>
+  <properties minattack="26" maxattack="36" defense_slash="16" defense_pierce="6"/>
   <properties speed="80"/>
   <properties speciality="vampire blow"/>
 

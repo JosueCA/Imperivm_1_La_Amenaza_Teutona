@@ -1,7 +1,7 @@
 <class id="RPraetorian" altid="RPretorian" cpp_class="CVXUnit" parent="Melee" entity="assets/entities/Units/Pretorian/Pretorian.ent.xml">
 
   <properties maxhealth="400"/>
-  <properties minattack="35" maxattack="45" defense_slash="15" defense_pierce="15"/>
+  <properties minattack="40" maxattack="50" defense_slash="16" defense_pierce="16"/>
   <properties speed="80"/>
   <properties speciality="death blow"/>
 
